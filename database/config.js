@@ -11,7 +11,7 @@ const dbConnection = async() => {
             useCreateIndex: true
         });
         console.log('Online');
-        console.log(process.env.DB_CNN);
+        //console.log(process.env.DB_CNN);
 
     } catch (error) {
         console.log(error)

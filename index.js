@@ -12,13 +12,10 @@ dbConnection();
 
 app.use(cors());
 
-app.get('/', (req, res) => {
+app.use(express.json());
 
-    res.json({
-        ok: true,
-        msg: 'Hola'
-    })
-})
+app.use('/api/usuarios', require('./Routes/usuario'))
+app.use('/api/login', require('./Routes/auth'))
 
 app.listen(3000, () => {
     console.log('Escuchando desde el port');
