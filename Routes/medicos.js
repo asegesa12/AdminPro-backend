@@ -25,10 +25,11 @@ routes.post('/', [
 
 
 routes.put('/:id', [
-
-
+    validarJWT,
+    check('nombre', 'El nombre es obligatorio').not().isEmpty(),
+    validarCampos
 ], UpdateMedico);
 
-routes.delete('/:id', deleteMedico);
+routes.delete('/:id', validarJWT, deleteMedico);
 
 module.exports = routes;

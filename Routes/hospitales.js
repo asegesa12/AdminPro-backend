@@ -21,9 +21,11 @@ routes.post('/', [
 
 routes.put('/:id', [
 
+    validarJWT,
+    check('nombre', 'El nombre es obligatorio').not().isEmpty(),
 
 ], UpdateHospital);
 
-routes.delete('/:id', deleteHospital);
+routes.delete('/:id', validarJWT, deleteHospital);
 
 module.exports = routes;

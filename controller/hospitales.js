@@ -36,20 +36,79 @@ const createHospital = async(req, res = responnse) => {
 
 }
 
-const UpdateHospital = (req, res = responnse) => {
+const UpdateHospital = async(req, res = responnse) => {
 
-    res.json({
-        ok: true,
-        msg: 'UpdateHospital'
-    });
+    const id = req.params.id
+    const uid = req.uid;
+
+    try {
+
+        const hospital = await Hospital.findById(id);
+
+
+        if (!hospital) {
+            res.status(404).json({
+                ok: false,
+                msg: 'Hospital Not Found'
+
+            });
+        }
+
+        const cambiosHospital = {
+            ...req.body,
+            usuario: uid
+        }
+
+        const UpdateHospital = await Hospital.findByIdAndUpdate(id, cambiosHospital, ({ new: true }))
+
+        res.json({
+            ok: true,
+            msg: 'Hospital Actualizado',
+            UpdateHospital
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            ok: true,
+            msg: 'Error al Actualizar'
+        });
+
+    }
+
 }
 
-const deleteHospital = (req, res = responnse) => {
+const deleteHospital = async(req, res = responnse) => {
 
-    res.json({
-        ok: true,
-        msg: 'deleteHospital'
-    });
+    const id = req.params.id
+
+    try {
+
+        const hospitalDb = await Hospital.findById(id);
+
+        if (!hospitalDb) {
+            res.status(400).json({
+                ok: false,
+                msg: 'Ese hospital no existe'
+            });
+        }
+
+        await Hospital.findByIdAndDelete(id);
+
+        res.json({
+            ok: true,
+            msg: 'Hospital Eliminado',
+
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            ok: false,
+            msg: 'Error al Borrar'
+        });
+    }
+
 }
 
 module.exports = {
