@@ -1,10 +1,11 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 const { validarCampos } = require('../middleware/validar-campos');
-const { login } = require('../controller/auth');
+const { login, GoogleSignIn } = require('../controller/auth');
 
 const router = Router();
 
+// api/login
 
 router.post('/', [
 
@@ -14,6 +15,11 @@ router.post('/', [
 
 ], login)
 
+router.post('/google', [
+    check('token', 'Token is Require').not().isEmpty(),
+    validarCampos
+
+], GoogleSignIn)
 
 
 

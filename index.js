@@ -1,6 +1,7 @@
 // User: mean_user
 // Password: P5L3gPj0jUiIJeJg
 
+
 const express = require('express');
 
 const { dbConnection } = require('./database/config');
@@ -26,6 +27,8 @@ app.use('/api/hospitales', require('./Routes/hospitales'))
 app.use('/api/medicos', require('./Routes/medicos'))
 
 app.use('/api/upload', require('./Routes/uploads'))
+
+app.use(express.static('public'))
 
 
 app.listen(3000, () => {
