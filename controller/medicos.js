@@ -2,16 +2,52 @@ const { response } = require('express');
 const Medico = require('../models/medicos');
 
 
-const getMedico = async(req, res = responnse) => {
+const getMedico = async(req, res = response) => {
 
-    const medicos = await Medico.find().populate('usuario', 'nombre img')
-        .populate('hospital', 'nombre img');
+
+    const desde = Number(req.query.desde) || 0;
+
+    const [medicos, total] = await Promise.all([
+        Medico.find({}, 'nombre img')
+        .populate('usuario', 'nombre img')
+        .populate('hospital', 'nombre img')
+        .skip(desde)
+        .limit(4),
+
+        Medico.countDocuments()
+    ]);
+
+    /* const medicos = await Medico.find().populate('usuario', 'nombre img')
+         .populate('hospital', 'nombre img');*/
 
     res.json({
         ok: true,
-        medicos
+        Medico: medicos,
+        total: total
     })
 
+}
+
+const getMedicoById = async(req, res = response) => {
+
+    const id = req.params.id;
+
+    try {
+        const medico = await Medico.findById(id)
+            .populate('usuario', 'nombre img')
+            .populate('hospital', 'nombre img')
+
+        res.json({
+            ok: true,
+            Medico: medico
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            msg: 'Error Inesperado'
+        });
+    }
 }
 
 const createMedico = async(req, res = responnse) => {
@@ -110,5 +146,6 @@ module.exports = {
     getMedico,
     createMedico,
     UpdateMedico,
-    deleteMedico
+    deleteMedico,
+    getMedicoById
 }
